@@ -1,0 +1,171 @@
+include ./profile.pug
+div(class="container")
+    div(class="tab")
+        h1(align="center") Welcome, Dashboard
+        table(class="table table-bordered table-dark" align="center")
+                tr 
+                    td 01
+                    td Upload Questions
+                    td 
+                        button(type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal") Click
+                        div(class="modal fade" id="exampleModal" style={color:"black"} aria-hidden="true")
+                            div(class="modal-dialog")
+                                div(class="modal-content")
+                                    div(class="modal-header")
+                                        h5(class="modal-title") Add Qustion Here
+                                        button(type="button" class="btn-close" data-bs-dismiss="modal")
+                                    div(class="modal-body")
+                                        form(action="/AddQuestion" method="post" name="frm" align="center") 
+                                            label(for="subject") Subject :
+                                            br
+                                            input(type="text" value=x name="subject" style={width:"100%"} readOnly)
+                                            input(type="text" style={display:'none'} value=username name="username" readOnly)
+                                            input(type="text" style={display:'none'} value=id name="id" readOnly)
+                                            br
+                                            label(for="question") Question
+                                            br
+                                            textarea(cols="60" rows="2" value="" id="ta" name="question")
+                                            br
+                                            input(type="submit" class="btn btn-dark" name="SignUp" value="Add") 
+                tr 
+                    td 02
+                    td Submissions
+                    td 
+                        button(type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#submitionView") Click
+                        div(class="modal fade" id="answerView" style={color:"black"} aria-hidden="true")
+                            div(class="modal-dialog")
+                                div(class="modal-content")
+                                    div(class="modal-header")
+                                        h5(class="modal-title") Answer
+                                        button(type="button" class="btn-close" data-bs-dismiss="modal")
+                                    div(class="modal-body")
+                                        textarea(id="answer" value="") 
+                        div(class="modal fade" id="submitionView" style={color:"black"} aria-hidden="true")
+                            div(class="modal-dialog")
+                                div(class="modal-content")
+                                    div(class="modal-header")
+                                        h5(class="modal-title") Select Qustion Here
+                                        button(type="button" class="btn-close" data-bs-dismiss="modal")
+                                    div(class="modal-body")
+                                        table(class="table table-bordered table-hover table-dark left")
+                                            thead 
+                                                tr 
+                                                    td username
+                                                    td Question
+                                                    td Answer
+                                            tbody
+                                                each j in usersubmitions
+                                                    each i in j 
+                                                        tr 
+                                                            td= i.username 
+                                                            td= i.question
+                                                            td 
+                                                                button(type="button" id=i.answer onclick="getAnswer(this.id)" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#answerView") View
+                                                                script(type="text/javascript").
+                                                                    function getAnswer(x){
+                                                                        var y=document.getElementById('answer');
+                                                                        y.value=x;
+                                                                    }
+
+                                                            
+                tr 
+                    td 03
+                    td Edit Questions
+                    td 
+                        button(type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#viewQuestions") Click
+                        div(class="modal fade" id="editQuestion" style={color:"black"} aria-hidden="true")
+                            div(class="modal-dialog")
+                                div(class="modal-content")
+                                    div(class="modal-header")
+                                        h5(class="modal-title") Select Qustion Here
+                                        button(type="button" class="btn-close" data-bs-dismiss="modal")
+                                    div(class="modal-body")
+                                        form(action="/EditQuestion" method="post" name="frm" align="center") 
+                                            label(for="subject") Subject :
+                                            br
+                                            input(type="text" value=x name="subject" style={width:"100%"} readOnly)
+                                            input(type="text" style={display:'none'} value=username name="username" readOnly)
+                                            input(type="text" style={display:'none'} value=id name="id" readOnly)
+                                            textarea(cols="60" rows="2" style={display:'none'} value="" name="oldquestion")
+                                            br
+                                            label(for="question_") Question
+                                            br
+                                            textarea(cols="60" rows="2" value="" id="ta" name="question_")
+                                            br
+                                            input(type="submit" class="btn btn-dark" value="Save Edit") 
+                        div(class="modal fade" id="viewQuestions" style={color:"black"} aria-hidden="true")
+                            div(class="modal-dialog")
+                                div(class="modal-content")
+                                    div(class="modal-header")
+                                        h5(class="modal-title") Select Qustion Here
+                                        button(type="button" class="btn-close" data-bs-dismiss="modal")
+                                    div(class="modal-body")
+                                        table(class="table bordered-table hover-table table-dark")
+                                            thead 
+                                                tr 
+                                                    td S. NO
+                                                    td Question
+                                                    td Edit
+                                            tbody(id="que") 
+                                                each i in questions
+                                                    tr
+                                                        td= questions.indexOf(i)+1
+                                                        td= i
+                                                        td
+                                                            button(type="button" class="btn btn-dark" id=i onclick="getQuestion(this.id)" data-bs-toggle="modal" data-bs-target="#editQuestion") Click
+                                                            script(type='text/javascript').
+                                                                function getQuestion(x){
+                                                                    var y=document.getElementsByName('question_')[0];
+                                                                    var z=document.getElementsByName('oldquestion')[0]
+                                                                    y.value=x;
+                                                                    z.value=x;
+                                                                }
+
+                tr 
+                    td 04
+                    td Delete Questions
+                    td 
+                        button(type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#delQuestions") Click
+                        div(class="modal fade" id="deleteQuestion" style={color:"black"} aria-hidden="true")
+                            div(class="modal-dialog")
+                                div(class="modal-content")
+                                    div(class="modal-header")
+                                        h5(class="modal-title") Question
+                                        button(type="button" class="btn-close" data-bs-dismiss="modal")
+                                    div(class="modal-body")
+                                        form(action="/DeleteQuestion" method="post" name="frm" align="center") 
+                                            label(for="subject") Subject 
+                                            br
+                                            input(type="text" value=x name="subject" style={width:"100%"} readOnly)
+                                            br
+                                            label(for="question_") Question
+                                            br
+                                            textarea(cols="60" rows="2" value="" id="ta" name="question_del" readOnly)
+                                            br
+                                            input(type="submit" class="btn btn-dark" value="Delete") 
+                        div(class="modal fade" id="delQuestions" style={color:"black"} aria-hidden="true")
+                            div(class="modal-dialog")
+                                div(class="modal-content")
+                                    div(class="modal-header")
+                                        h5(class="modal-title") Add Qustion Here
+                                        button(type="button" class="btn-close" data-bs-dismiss="modal")
+                                    div(class="modal-body")
+                                        table(class="table bordered-table hover-table table-dark")
+                                            thead 
+                                                tr 
+                                                    td S. NO
+                                                    td Question
+                                                    td Edit
+                                            tbody(id="que") 
+                                                each i in questions
+                                                    tr
+                                                        td= questions.indexOf(i)+1
+                                                        td= i
+                                                        td
+                                                            button(type="button" class="btn btn-dark" id=i onclick="delQuestion(this.id)" data-bs-toggle="modal" data-bs-target="#deleteQuestion") Click
+                                                            script(type='text/javascript').
+                                                                function delQuestion(x){
+                                                                    var y=document.getElementsByName('question_del')[0];
+                                                                    y.value=x;
+                                                                    z.value=x;
+                                                                }

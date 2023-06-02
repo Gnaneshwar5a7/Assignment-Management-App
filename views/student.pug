@@ -1,0 +1,19 @@
+include ./profile.pug
+div(class="container")
+    div(class="tab")
+        table(class="table table-hover table-striped table-bordered table-dark" align="center")
+            thead 
+                tr
+                    th S.No
+                    th Subject
+                    th #
+            tbody 
+                each i in subjects
+                    tr
+                        form(action="/Subject", method="post")  
+                            td= subjects.indexOf(i)+1
+                            td
+                                input(class="input" type="text" name="subject" value=i readOnly)
+                            td
+                                input(value="select" type="submit" role="button" class="btn1")
+                

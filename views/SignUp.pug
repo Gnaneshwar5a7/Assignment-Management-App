@@ -1,0 +1,57 @@
+
+div(class='container abs sup' align="center" style={display: "none"})
+    button(type="button" class="btn-close bg-light" aria-label="Close" onclick="account(-1)")
+    ul(id="errors")
+    br
+    form(action="/SignUp" method="post")
+        table 
+            tr 
+                td 
+                    label(for="username") Username
+                td
+                    input(type="text" value="" name="username")
+            tr 
+                td 
+                    label(for="fullname") Full Name
+                td
+                    input(type="text" value="" name="fullname")
+            tr
+                td
+                    label(for="password") Password
+                td
+                    input(type="password" value="" name="password")
+            tr
+                td
+                    label(for="cpassword") Confirm Password
+                td
+                    input(type="password" value="" name="cpassword")
+            tr
+                td
+                    label(for="email") EMail
+                td
+                    input(type="text" name="email" value="")
+            tr
+                td
+                    label(for="branch") Branch
+                td
+                    select(name='branch')
+                        option(value='') -- Select --
+                            each i in data 
+                                option(value=i.branch)= i.branch
+            tr
+                td
+                    label(for="userType") Role
+                td
+                    select(name='userType' onchange="select()")
+                        option(value='') -- Select --
+                        option(value='Student') Student
+                        option(value='Faculty') Faculty
+            tr
+                td
+                    label(for="subject") Subject
+                td
+                    select(type="text" name="subject" disabled)
+                        option(value='') -- Select --
+                            each i in subject
+                                option(value=i)= i
+        input(type="submit" name="SignUp" value="Sign Up")

@@ -1,0 +1,75 @@
+*{
+    font-family: 'Times New Roman', Times, serif;
+}
+label,input,select{
+    margin: 10px;
+}
+.abs{
+    position:fixed;
+    width: 40vw;
+    overflow: hidden;
+    /* top: 18vh; */
+    left:30vw;
+    background-color: rgba(0, 0, 0, 0.795);
+    color: aliceblue;
+    /* text-align: center; */
+}
+.sup{
+    top: 13vh;
+}
+.sin{
+    top: 25vh;
+}
+form{
+    padding: 20px;
+    text-align: left;
+}
+.abs button{
+    margin: 2px;
+    position: relative;
+    left: 36vw;
+    border-radius: 50%;
+}
+.tab{
+    /* width: 50vw; */
+    margin: 20px;
+    text-align: center;
+}
+.tab table,.tab ul{
+    width: 50vw;
+}
+
+#ta{
+    width: 100%;
+position: relative;
+left: 10px;
+}
+.modal-dialog{
+    max-width: fit-content;
+}
+.btn1{
+    background-color: transparent;
+    border-radius: 10%;
+    border: none;
+    color: aliceblue;
+    width: 80%;
+    height: 80%;
+    text-align: center;
+}
+.btn1:hover{
+    background-color: #00000021;
+}
+.input{
+    background-color: transparent;
+    color: aliceblue;
+    border: none;
+    text-align: center;
+}
+.input_{
+    border: none;
+    width: fit-content;
+    font-weight: bold;
+}
+.left{
+    text-align: left;
+}

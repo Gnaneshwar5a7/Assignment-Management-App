@@ -236,7 +236,6 @@ function getQuestions(sess, s) {
             
             questionDocs = docs;
             sess.questions = questions;
-            console.log(questions)
         }
     })
     return;

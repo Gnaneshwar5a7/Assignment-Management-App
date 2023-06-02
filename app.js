@@ -3,7 +3,7 @@ require('dotenv').config();
 const db = require('./models/db');
 const express = require('express');
 const bodyParser = require('body-parser');
-const expressValidator = require("express-validator");
+// const expressValidator = require("express-validator");
 const { check, validationResult } = require('express-validator')
 var session = require('express-session');
 const question = require('./models/question');
@@ -66,8 +66,6 @@ app.get('/Student', function (req, res) {
 })
 
 app.get('/Subject', function (req, res) {
-    console.log("Subject");
-    console.log(req.session)
     if (req.session.login == false) {
         res.send("<script>alert('Session no longer exists')</script>")
     }
@@ -119,7 +117,6 @@ app.get('/Faculty', function (req, res) {
     if (req.session.login == false) {
         res.send("<script>alert('Session no longer exists')</script>")
     }
-    console.log(req.session.questions);
     req.session.questions = db.questions;
     req.session.usersubmitions = []
     for (var j = 0; j < req.session.questions.length; j++) {

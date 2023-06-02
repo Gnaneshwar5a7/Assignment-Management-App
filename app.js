@@ -156,11 +156,7 @@ app.post('/DeleteQuestion', function (req, res) {
 
 app.get('/logout', function (req, res) {
     sess = req.session;
-    sess.destroy();
-  db.questionDocs = [];
-   db.answerDocs = [];
-   db.questions=[];
-
+    // sess.destroy();
     sess.login = false;
     res.redirect('/')
 })

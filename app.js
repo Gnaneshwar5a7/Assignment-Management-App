@@ -42,7 +42,6 @@ app.post('/SignUp',
     check('password').not().isEmpty().isLength({ min: 6 }).withMessage('Password name must be 6 characters'),
     check('cpassword').custom((value, { req }) => (value === req.body.password)).withMessage("Confirm password not match with your password"),
     check('email').not().isEmpty().isEmail().normalizeEmail().withMessage("Enetr proper email"),
-    check('subject').not().isEmpty().isAlpha().withMessage('Invalid Subject'),
     check('branch').not().isEmpty().isAlpha().withMessage('Invalid Branch'),
     function (req, res) {
         const errors = validationResult(req);

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+require('dotenv').config();
 const db = require('./models/db');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -11,7 +12,8 @@ const app = express();
 const PORT = 3000;
 
 mongoose.set('strictQuery', false);
-mongoose.connect("mongodb://127.0.0.1:27017/user");
+// mongoose.connect("mongodb://127.0.0.1:27017/user");
+mongoose.connect(process.env.MongoDB_CONNECT_URI);
 
 
 app.set('view engine', 'pug');

@@ -9,7 +9,7 @@ var session = require('express-session');
 const question = require('./models/question');
 
 const app = express();
-const PORT = 3000;
+const PORT = 8080;
 
 mongoose.set('strictQuery', false);
 // mongoose.connect("mongodb://127.0.0.1:27017/user");

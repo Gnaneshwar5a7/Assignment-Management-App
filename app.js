@@ -98,6 +98,7 @@ app.post('/DeleteQuestion', function (req, res) {
 })
 
 app.get('/logout', function (req, res) {
+    console.log(req.session.uesrname+" LOGOUT");
     sess = req.session;
     sess.destroy();
     sess.login = false;

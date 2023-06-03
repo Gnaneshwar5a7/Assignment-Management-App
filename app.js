@@ -57,7 +57,7 @@ app.post('/Login', function (req, res) {
 
 app.get('/Student', function (req, res) {
     if (req.session.login==undefined ||req.session.login === false) {
-        res.send("<script>alert('Session no longer exists')</script>");
+        res.redirect("/Logout");
     }
     res.render("student", req.session);
 })
@@ -71,7 +71,7 @@ app.get('/Subject', function (req, res) {
 
 app.post('/Subject', function (req, res) {
     if (req.session.login==undefined ||req.session.login === false) {
-        res.send("<script>alert('Session no longer exists')</script>");
+        res.redirect("/Logout");
     }
     req.session.subject = req.body.subject;
     res.redirect('/Subject?subject=' + req.session.subject)

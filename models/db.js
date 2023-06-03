@@ -121,7 +121,7 @@ function login(req, res) {
 
 function serveFaculty(req, res) {
     if (req.session.login==undefined || req.session.login == false) {
-        res.send("<script>alert('Session no longer exists')</script>")
+        res.redirect("/Logout");
     }
     question.find({ subject: req.session.subject }, function (err, questions) {
         if (err) {
@@ -172,7 +172,7 @@ function serveSubject(req, res) {
                 }
                 else {
                     if (req.session.login==undefined ||req.session.login == false) {
-                        res.send("<script>alert('Session no longer exists')</script>")
+                        res.redirect("/Logout");
                     }
                     req.session.subject = req.query.subject;
                     req.session.questions = []
@@ -230,7 +230,7 @@ function submitAnswer(req, res) {
 function addQuestion(req, res) {
     const newQuestion = new question();
     if (req.session.login==undefined ||req.session.login === false) {
-        res.send("<script>alert('Session no longer exists')</script>");
+        res.redirect("/Logout");
     }
     newQuestion.subject = req.session.subject;
     newQuestion.question = req.body.question;
@@ -248,7 +248,7 @@ function addQuestion(req, res) {
 
 function editQuestion(req, res) {
     if (req.session.login==undefined ||req.session.login === false) {
-        res.send("<script>alert('Session no longer exists')</script>");
+        res.redirect("/Logout");
     }
     question.findOneAndUpdate({ question: req.body.oldquestion, subject: req.body.subject }, { question: req.body.question_ }, function (err, result) {
         if (err) {
@@ -266,8 +266,7 @@ function editQuestion(req, res) {
 
 
 function deleteQuestion(req, res) {
-    if (req.session.login==undefined ||req.session.login === false) {
-        res.send("<script>alert('Session no longer exists')</script>");
+    if (req.session.login==undefined ||req.session.login === false) {res.redirect("/Logout");
     }
     question.findOneAndRemove({ question: req.body.question_del, subject: req.body.subject }, function (err, result) {
         if (err) {

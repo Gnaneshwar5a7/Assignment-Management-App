@@ -6,13 +6,16 @@ label,input,select{
 }
 .abs{
     position:fixed;
-    width: 40vw;
+    width: 80vw;
     overflow: hidden;
     /* top: 18vh; */
-    left:30vw;
+    left:10vw;
     background-color: rgba(0, 0, 0, 0.795);
     color: aliceblue;
     /* text-align: center; */
+    display: flex;
+justify-content: center;
+    
 }
 .sup{
     top: 13vh;
@@ -77,4 +80,12 @@ left: 10px;
 .min-max{
     min-width: 400px;
     max-width: 600px;
+}
+
+.nav-div{
+    display: flex;
+flex-direction: row;
+}
+.nav-div li{
+    padding: 10px;
 }

@@ -79,7 +79,7 @@ function login(req, res) {
                         console.log(err);
                     }
                     if (data) {
-                        console.log(docs.username+" LOGIN")
+                        console.log(docs.username+" LOGED IN")
                         if (docs.userType === "Faculty") {
                             sess.userId = docs.id;
                             sess.username = docs.username;

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
-const db = require('./models/db');
+const db = require('./models/manage');
 const express = require('express');
 const bodyParser = require('body-parser');
 // const expressValidator = require("express-validator");
@@ -98,15 +98,15 @@ app.post('/DeleteQuestion', function (req, res) {
 })
 
 app.get('/logout', function (req, res) {
-    console.log(req.session.uesrname+" LOGOUT");
     sess = req.session;
+    console.log(sess.username+" LOGED OUT");
     sess.destroy();
     sess.login = false;
     res.redirect('/')
 })
 app.listen(PORT, (error) => {
     if (!error) {
-        console.log("Server is Successfully Running,and App is listening on port http://localhost:" + PORT)
+        console.log("Server is Successfully Running")
     }
     else {
         console.log("Error occurred, server can't start", error);

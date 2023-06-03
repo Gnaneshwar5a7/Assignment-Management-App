@@ -289,55 +289,5 @@ function deleteQuestion(req, res) {
 
 }
 
-// function getQuestions(sess, s) {
-//     question.find({ subject: s }, function (err, docs) {
-//         if (err) {
-//             console.log(err);
-//         }
-//         else {
-//             for (var i = 0; i < docs.length; i++) {
-//                 if (questions.indexOf(docs[i].question) == -1) {
-//                     questions.push(docs[i].question)
-//                 }
 
-//             }
-
-//             questionDocs = docs;
-//             sess.questions = questions;
-//         }
-//     })
-//     return;
-// }
-
-// function getAllQuestions() {
-//     question.find(function (err, docs) {
-//         if (err) {
-//             console.log(err);
-//         }
-//         else {
-//             for (var i = 0; i < docs.length; i++) {
-//                 if (questionDocs.indexOf(docs[i]) == -1) {
-//                     questionDocs.push(docs[i])
-//                 }
-//             }
-//         }
-//     })
-// }
-
-// function getAllAnswers() {
-//     answer.find(function (err, docs) {
-//         if (err) {
-//             console.log(err);
-//         }
-//         else {
-//             for (var i = 0; i < docs.length; i++) {
-
-//                 if (answerDocs.indexOf(docs[i]) == -1) {
-//                     answerDocs.push(docs[i])
-//                 }
-//             }
-//         }
-//     })
-
-// }
 module.exports = { insert, login, submitAnswer, serveSubject, serveFaculty,addQuestion, editQuestion, deleteQuestion, getBranchDetails, branches };

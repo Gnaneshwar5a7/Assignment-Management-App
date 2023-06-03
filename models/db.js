@@ -120,6 +120,9 @@ function login(req, res) {
 
 
 function serveFaculty(req, res) {
+    if (req.session.login==undefined || req.session.login == false) {
+        res.send("<script>alert('Session no longer exists')</script>")
+    }
     question.find({ subject: req.session.subject }, function (err, questions) {
         if (err) {
             console.log(err);
@@ -130,9 +133,6 @@ function serveFaculty(req, res) {
                     console.log(err);
                 }
                 else {
-                    if (req.session.login == false) {
-                        res.send("<script>alert('Session no longer exists')</script>")
-                    }
                     req.session.questions = []
                     req.session.usersubmitions = []
                     for (var j = 0; j < questions.length; j++) {
@@ -171,7 +171,7 @@ function serveSubject(req, res) {
                     console.log(err);
                 }
                 else {
-                    if (req.session.login == false) {
+                    if (req.session.login==undefined ||req.session.login == false) {
                         res.send("<script>alert('Session no longer exists')</script>")
                     }
                     req.session.subject = req.query.subject;
@@ -229,7 +229,7 @@ function submitAnswer(req, res) {
 
 function addQuestion(req, res) {
     const newQuestion = new question();
-    if (req.session.login === false) {
+    if (req.session.login==undefined ||req.session.login === false) {
         res.send("<script>alert('Session no longer exists')</script>");
     }
     newQuestion.subject = req.session.subject;
@@ -247,7 +247,7 @@ function addQuestion(req, res) {
 }
 
 function editQuestion(req, res) {
-    if (req.session.login === false) {
+    if (req.session.login==undefined ||req.session.login === false) {
         res.send("<script>alert('Session no longer exists')</script>");
     }
     question.findOneAndUpdate({ question: req.body.oldquestion, subject: req.body.subject }, { question: req.body.question_ }, function (err, result) {
@@ -266,6 +266,9 @@ function editQuestion(req, res) {
 
 
 function deleteQuestion(req, res) {
+    if (req.session.login==undefined ||req.session.login === false) {
+        res.send("<script>alert('Session no longer exists')</script>");
+    }
     question.findOneAndRemove({ question: req.body.question_del, subject: req.body.subject }, function (err, result) {
         if (err) {
             console.log(err);

@@ -13,7 +13,7 @@ div(class="container")
                         button(type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#viewQuestions") Questions
                         div(class="modal fade" id="viewQuestions" style={color:"black"} aria-hidden="true")
                             div(class="modal-dialog")
-                                div(class="modal-content")
+                                div(class="modal-content min-max")
                                     div(class="modal-header")
                                         h5(class="modal-title") Assignment Questions
                                         button(type="button" class="btn-close" data-bs-dismiss="modal")
@@ -34,7 +34,7 @@ div(class="container")
                         button(type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#viewSubmitions") Submitions 
                         div(class="modal fade" id="viewSubmitions" style={color:"black"} aria-hidden="true")
                             div(class="modal-dialog")
-                                div(class="modal-content")
+                                div(class="modal-content min-max")
                                     div(class="modal-header")
                                         h5(class="modal-title") Your Submitions
                                         button(type="button" class="btn-close" data-bs-dismiss="modal")
@@ -45,7 +45,7 @@ div(class="container")
                                             span= i
                                             div 
                                                 b Answer:
-                                            p(class="answer")= value=answers[submitions.indexOf(i)]
+                                            p(class="answer min-max")= value=answers[submitions.indexOf(i)]
 
                 tr 
                     td 3
@@ -53,11 +53,11 @@ div(class="container")
                         button(type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#submitAnswers") Submit Answers 
                         div(class="modal fade" id="submitAnswers" style={color:"black"} aria-hidden="true")
                             div(class="modal-dialog")
-                                div(class="modal-content")
+                                div(class="modal-content min-max")
                                     div(class="modal-header")
                                         h5(class="modal-title") Answer the Questions
                                         button(type="button" class="btn-close" data-bs-dismiss="modal")
-                                    div(class="modal-body")
+                                    div(class="modal-body min-max")
                                         each i in pending
                                             form(action="/answer", method="post")
                                                 label(for="question")

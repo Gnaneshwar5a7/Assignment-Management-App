@@ -31,8 +31,6 @@ app.use(session({
 }))
 
 app.get('/', function (req, res) {
-    db.getAllAnswers();
-    db.getAllQuestions();
     req.session.login = false;
     db.getBranchDetails(req, res);
 });
@@ -61,42 +59,13 @@ app.get('/Student', function (req, res) {
     if (req.session.login == false) {
         res.send("<script>alert('Session no longer exists')</script>")
     }
-    req.session.questions = db.questions
-    res.render("student", { username: req.session.username, id: req.session.id, x: req.session.branch, questions: req.session.questions, subjects: req.session.subjects });
+    console.log(req.session);
+    res.render("student", req.session);
 })
 
 app.get('/Subject', function (req, res) {
-    if (req.session.login == false) {
-        res.send("<script>alert('Session no longer exists')</script>")
-    }
-    req.session.subject = req.query.subject;
-    req.session.questions = []
-    for (var i = 0; i < req.session.questionDocs.length; i++) {
-        if (req.session.questionDocs[i].subject == req.session.subject) {
-            if (req.session.questions.indexOf(req.session.questionDocs[i].question) == -1) {
-                req.session.questions.push(req.session.questionDocs[i].question);
-            }
-        }
-    }
-    req.session.answers = []
-    req.session.submitions = []
-    req.session.pending = []
-    for (var i = 0; i <req.session.answerDocs.length; i++) {
-        if (req.session.answerDocs[i].subject == req.session.subject && req.session.answerDocs[i].username == req.session.username) {
-            if (req.session.submitions.indexOf(req.session.answerDocs[i].question) == -1) {
-                req.session.submitions.push(req.session.answerDocs[i].question);
-            }
-            if (req.session.answers.indexOf(req.session.answerDocs[i].answer) == -1) {
-                req.session.answers.push(req.session.answerDocs[i].answer);
-            }
-        }
-    }
-    req.session.questions.forEach(element => {
-        if (req.session.submitions.indexOf(element) == -1) {
-            req.session.pending.push(element)
-        }
-    });
-    res.render('subject', req.session);
+    db.serveSubject(req,res);
+    
 })
 
 
@@ -114,31 +83,8 @@ app.post('/answer', function (req, res) {
 })
 
 app.get('/Faculty', function (req, res) {
-    if (req.session.login == false) {
-        res.send("<script>alert('Session no longer exists')</script>")
-    }
-    req.session.questions = db.questions;
-    req.session.usersubmitions = []
-    for (var j = 0; j < req.session.questions.length; j++) {
-        var x = [];
-        for (var i = 0; i < req.session.answerDocs.length; i++) {
-            if (req.session.answerDocs[i].question == req.session.questions[j] && req.session.answerDocs[i].subject==req.session.subject) {
-                var doc = {}
-                doc.username = req.session.answerDocs[i].username;
-                doc.answer = req.session.answerDocs[i].answer;
-                doc.question = req.session.answerDocs[i].question;
-                if (x.indexOf(doc) == -1) {
-                    x.push(doc);
-                }
-            }
-        }
-        if (req.session.usersubmitions.indexOf(x) == -1) {
-            req.session.usersubmitions.push(x);
-        }
-    }
-    console.log(req.session)
-    var data = { username: req.session.username, x: req.session.subject, questions: req.session.questions, usersubmitions: req.session.usersubmitions }
-    res.render("faculty", data);
+    db.serveFaculty(req,res);
+   
 })
 
 app.post('/AddQuestion', function (req, res) {
@@ -153,7 +99,7 @@ app.post('/DeleteQuestion', function (req, res) {
 
 app.get('/logout', function (req, res) {
     sess = req.session;
-    // sess.destroy();
+    sess.destroy();
     sess.login = false;
     res.redirect('/')
 })

@@ -6,11 +6,9 @@ const question = require('./question');
 const branch = require('./branch');
 const answer = require('./answers');
 
-var questions = [];
-var branches = {};
-var questionDocs = [];
-var answerDocs = [];
 mongoose.set('strictQuery', true);
+
+var branches = [];
 function getBranchDetails(req, res) {
     branch.find(function (err, docs) {
         if (err) {
@@ -50,7 +48,9 @@ function insert(req, res) {
     newUser.email = req.body.email;
     newUser.name = req.body.fullname;
     newUser.branch = req.body.branch;
-    newUser.subject = req.body.subject;
+    if (req.body.userType == 'Faculty') {
+        newUser.subject = req.body.subject;
+    }
     newUser.userType = req.body.userType;
 
     newUser.save(function (err, result) {
@@ -80,10 +80,6 @@ function login(req, res) {
                     }
                     if (data) {
                         if (docs.userType === "Faculty") {
-                            getQuestions(sess, docs.subject);
-                            req.session.questions=questions;
-                            req.session.questionDocs =questionDocs;
-                            req.session.answerDocs=answerDocs;
                             sess.userId = docs.id;
                             sess.username = docs.username;
                             req.session.fullname = docs.fullname;
@@ -94,9 +90,6 @@ function login(req, res) {
                         }
                         else {
                             var subjects = []
-                            req.session.questions=questions;
-                            req.session.questionDocs =questionDocs;
-                            req.session.answerDocs=answerDocs;
                             branches.forEach(i => {
                                 if (i.branch == docs.branch) {
                                     subjects = i.subjects
@@ -106,7 +99,7 @@ function login(req, res) {
                             req.session.userId = docs.id;
                             req.session.username = docs.username;
                             req.session.fullname = docs.fullname;
-                            req.session.x = docs.branch;
+                            req.session.option = docs.branch;
                             req.session.login = true;
                             res.redirect('/Student');
                         }
@@ -124,13 +117,103 @@ function login(req, res) {
     })
 }
 
+
+function serveFaculty(req, res) {
+    question.find({ subject: req.session.subject }, function (err, questions) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            answer.find({ subject: req.session.subject }, function (err, answerDocs) {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    if (req.session.login == false) {
+                        res.send("<script>alert('Session no longer exists')</script>")
+                    }
+                    req.session.questions = []
+                    req.session.usersubmitions = []
+                    for (var j = 0; j < questions.length; j++) {
+                        var question = questions[j].question
+                        req.session.questions.push(question);
+                        var x = [];
+                        for (var i = 0; i < answerDocs.length; i++) {
+                            if (answerDocs[i].question == question) {
+                                var doc = {}
+                                doc.username = answerDocs[i].username;
+                                doc.answer = answerDocs[i].answer;
+                                doc.question = answerDocs[i].question;
+                                x.push(doc);
+                            }
+                        }
+                        if (req.session.usersubmitions.indexOf(x) == -1) {
+                            req.session.usersubmitions.push(x);
+                        }
+                    }
+                    var data = { username: req.session.username, option: req.session.subject, questions: req.session.questions, usersubmitions: req.session.usersubmitions }
+                    res.render("faculty", data);
+                }
+            })
+        }
+    })
+}
+
+function serveSubject(req, res) {
+    answer.find(function (err, answerDocs) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            question.find(function (err, questionDocs) {
+                if (err) {
+                    console.log(err);
+                }
+                else {
+                    if (req.session.login == false) {
+                        res.send("<script>alert('Session no longer exists')</script>")
+                    }
+                    req.session.subject = req.query.subject;
+                    req.session.questions = []
+                    for (var i = 0; i < questionDocs.length; i++) {
+                        if (questionDocs[i].subject == req.session.subject) {
+                            if (req.session.questions.indexOf(questionDocs[i].question) == -1) {
+                                req.session.questions.push(questionDocs[i].question);
+                            }
+                        }
+                    }
+                    req.session.answers = []
+                    req.session.submitions = []
+                    req.session.pending = []
+                    for (var i = 0; i < answerDocs.length; i++) {
+                        if (answerDocs[i].subject == req.session.subject && answerDocs[i].username == req.session.username) {
+                            if (req.session.submitions.indexOf(answerDocs[i].question) == -1) {
+                                req.session.submitions.push(answerDocs[i].question);
+                            }
+                            if (req.session.answers.indexOf(answerDocs[i].answer) == -1) {
+                                req.session.answers.push(answerDocs[i].answer);
+                            }
+                        }
+                    }
+                    req.session.questions.forEach(element => {
+                        if (req.session.submitions.indexOf(element) == -1) {
+                            req.session.pending.push(element)
+                        }
+                    });
+                    res.render('subject', req.session);
+                }
+            })
+        }
+    })
+
+}
+
 function submitAnswer(req, res) {
     const newAnswer = new answer();
     newAnswer.username = req.session.username;
     newAnswer.subject = req.session.subject;
     newAnswer.question = req.body.question;
     newAnswer.answer = req.body.answer;
-    answerDocs.push({ username: req.session.username, subject: req.session.subject, question: req.body.question, answer: req.body.answer })
     newAnswer.save(function (err, result) {
         if (err) {
 
@@ -150,11 +233,8 @@ function addQuestion(req, res) {
     }
     newQuestion.subject = req.session.subject;
     newQuestion.question = req.body.question;
-    questions.push(newQuestion.question);
     newQuestion.save(function (err, result) {
-
         if (err) {
-
             console.log(err);
         }
         else {
@@ -168,20 +248,6 @@ function addQuestion(req, res) {
 function editQuestion(req, res) {
     if (req.session.login === false) {
         res.send("<script>alert('Session no longer exists')</script>");
-    }
-    var i = questions.indexOf(req.body.oldquestion);
-    questions[i] = req.body.question_;
-
-    for (var i = 0; i < questionDocs.length; i++) {
-        if (questionDocs[i].question == req.body.oldquestion) {
-            questionDocs[i].question = req.body.question_;
-        }
-    }
-
-    for (var i = 0; i < answerDocs.length; i++) {
-        if (answerDocs[i].question == req.body.oldquestion) {
-            answerDocs[i].question = req.body.question_;
-        }
     }
     question.findOneAndUpdate({ question: req.body.oldquestion, subject: req.body.subject }, { question: req.body.question_ }, function (err, result) {
         if (err) {
@@ -199,8 +265,6 @@ function editQuestion(req, res) {
 
 
 function deleteQuestion(req, res) {
-    var i = questions.indexOf(req.body.question_del);
-    questions.splice(i, 1);
     question.findOneAndRemove({ question: req.body.question_del, subject: req.body.subject }, function (err, result) {
         if (err) {
             console.log(err);
@@ -221,55 +285,55 @@ function deleteQuestion(req, res) {
 
 }
 
-function getQuestions(sess, s) {
-    question.find({ subject: s }, function (err, docs) {
-        if (err) {
-            console.log(err);
-        }
-        else {
-            for (var i = 0; i < docs.length; i++) {
-                if (questions.indexOf(docs[i].question) == -1) {
-                    questions.push(docs[i].question)
-                }
+// function getQuestions(sess, s) {
+//     question.find({ subject: s }, function (err, docs) {
+//         if (err) {
+//             console.log(err);
+//         }
+//         else {
+//             for (var i = 0; i < docs.length; i++) {
+//                 if (questions.indexOf(docs[i].question) == -1) {
+//                     questions.push(docs[i].question)
+//                 }
 
-            }
-            
-            questionDocs = docs;
-            sess.questions = questions;
-        }
-    })
-    return;
-}
+//             }
 
-function getAllQuestions() {
-    question.find(function (err, docs) {
-        if (err) {
-            console.log(err);
-        }
-        else {
-            for (var i = 0; i < docs.length; i++) {
-                if (questionDocs.indexOf(docs[i]) == -1) {
-                    questionDocs.push(docs[i])
-                }
-            }
-        }
-    })
-}
+//             questionDocs = docs;
+//             sess.questions = questions;
+//         }
+//     })
+//     return;
+// }
 
-function getAllAnswers() {
-    answer.find(function (err, docs) {
-        if (err) {
-            console.log(err);
-        }
-        else {
-            for (var i = 0; i < docs.length; i++) {
+// function getAllQuestions() {
+//     question.find(function (err, docs) {
+//         if (err) {
+//             console.log(err);
+//         }
+//         else {
+//             for (var i = 0; i < docs.length; i++) {
+//                 if (questionDocs.indexOf(docs[i]) == -1) {
+//                     questionDocs.push(docs[i])
+//                 }
+//             }
+//         }
+//     })
+// }
 
-                if (answerDocs.indexOf(docs[i]) == -1) {
-                    answerDocs.push(docs[i])
-                }
-            }
-        }
-    })
+// function getAllAnswers() {
+//     answer.find(function (err, docs) {
+//         if (err) {
+//             console.log(err);
+//         }
+//         else {
+//             for (var i = 0; i < docs.length; i++) {
 
-}
-module.exports = { insert, login, submitAnswer, addQuestion,getAllAnswers ,getAllQuestions, getQuestions, questions, editQuestion, deleteQuestion, getBranchDetails, branches, questionDocs, answerDocs };
+//                 if (answerDocs.indexOf(docs[i]) == -1) {
+//                     answerDocs.push(docs[i])
+//                 }
+//             }
+//         }
+//     })
+
+// }
+module.exports = { insert, login, submitAnswer, serveSubject, serveFaculty,addQuestion, editQuestion, deleteQuestion, getBranchDetails, branches };

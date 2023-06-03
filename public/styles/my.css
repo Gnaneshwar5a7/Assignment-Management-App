@@ -73,3 +73,8 @@ left: 10px;
 .left{
     text-align: left;
 }
+
+.min-max{
+    min-width: 400px;
+    max-width: 600px;
+}

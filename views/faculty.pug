@@ -18,7 +18,7 @@ div(class="container")
                                         form(action="/AddQuestion" method="post" name="frm" align="center") 
                                             label(for="subject") Subject :
                                             br
-                                            input(type="text" value=x name="subject" style={width:"100%"} readOnly)
+                                            input(type="text" value=option name="subject" style={width:"100%"} readOnly)
                                             input(type="text" style={display:'none'} value=username name="username" readOnly)
                                             input(type="text" style={display:'none'} value=id name="id" readOnly)
                                             br
@@ -39,7 +39,7 @@ div(class="container")
                                         h5(class="modal-title") Answer
                                         button(type="button" class="btn-close" data-bs-dismiss="modal")
                                     div(class="modal-body")
-                                        textarea(id="answer" value="") 
+                                        textarea(class="min-max" id="answer" value="") 
                         div(class="modal fade" id="submitionView" style={color:"black"} aria-hidden="true")
                             div(class="modal-dialog")
                                 div(class="modal-content")
@@ -83,7 +83,7 @@ div(class="container")
                                         form(action="/EditQuestion" method="post" name="frm" align="center") 
                                             label(for="subject") Subject :
                                             br
-                                            input(type="text" value=x name="subject" style={width:"100%"} readOnly)
+                                            input(type="text" value=option name="subject" style={width:"100%"} readOnly)
                                             input(type="text" style={display:'none'} value=username name="username" readOnly)
                                             input(type="text" style={display:'none'} value=id name="id" readOnly)
                                             textarea(cols="60" rows="2" style={display:'none'} value="" name="oldquestion")
@@ -136,7 +136,7 @@ div(class="container")
                                         form(action="/DeleteQuestion" method="post" name="frm" align="center") 
                                             label(for="subject") Subject 
                                             br
-                                            input(type="text" value=x name="subject" style={width:"100%"} readOnly)
+                                            input(type="text" value=option name="subject" style={width:"100%"} readOnly)
                                             br
                                             label(for="question_") Question
                                             br

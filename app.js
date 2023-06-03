@@ -26,8 +26,8 @@ app.use(bodyParser.json());
 app.use(session({
     secret: 'Star boyoyo44',
     resave: false,
-    saveUninitialized: true
-    // cookie: { maxAge: 60000 }
+    saveUninitialized: true,
+    cookie: { maxAge: 300000 }
 }))
 
 app.get('/', function (req, res) {

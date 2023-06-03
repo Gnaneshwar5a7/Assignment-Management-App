@@ -59,7 +59,6 @@ app.get('/Student', function (req, res) {
     if (req.session.login == false) {
         res.send("<script>alert('Session no longer exists')</script>")
     }
-    console.log(req.session);
     res.render("student", req.session);
 })
 

@@ -36,8 +36,8 @@ app.get('/', function (req, res) {
 });
 
 app.post('/SignUp',
-    check('username').not().isEmpty().isAlpha().isLength({ min: 5 }).withMessage('User name must be 5 characters'),
-    check('password').not().isEmpty().isLength({ min: 6 }).withMessage('Password name must be 6 characters'),
+    check('username').not().isEmpty().isLength({ min: 5 }).withMessage('User name must be 5 characters'),
+    check('password').not().isEmpty().isLength({ min: 5 }).withMessage('Password name must be 5 characters'),
     check('cpassword').custom((value, { req }) => (value === req.body.password)).withMessage("Confirm password not match with your password"),
     check('email').not().isEmpty().isEmail().normalizeEmail().withMessage("Enetr proper email"),
     check('branch').not().isEmpty().isAlpha().withMessage('Invalid Branch'),

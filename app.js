@@ -12,8 +12,8 @@ const app = express();
 const PORT = 8080;
 
 mongoose.set('strictQuery', false);
-mongoose.connect("mongodb://127.0.0.1:27017/user");
-// mongoose.connect(process.env.MongoDB_CONNECT_URI);
+// mongoose.connect("mongodb://127.0.0.1:27017/user");
+mongoose.connect(process.env.MongoDB_CONNECT_URI);
 
 
 app.set('view engine', 'pug');
